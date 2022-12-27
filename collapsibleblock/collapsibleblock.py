@@ -15,12 +15,9 @@ from os import path
 class Header:
 
     id_head = itertools.count(1)
-    # id_sub_head = itertools.count(1)
 
     def __init__(self, header_name, *argv):
         self.id_header = next(Header.id_head)
-        # self.id_sub_header = f"{self.id_header}.{next(Header.id_sub_head)}"
-        # self.header_id = self.id_header or self.new_header_id()
         self.header_name = header_name
         self.sub_header_name = [sub_header for sub_header in argv]
         self.folder_to_create = "json_files/"
@@ -29,14 +26,10 @@ class Header:
     def check_header_id(self):
         dir_files = os.listdir("json_files")
         file = self.json_file_template
-        # print(f"file: {file}")
-        # print(f"dir_files: {dir_files}")
         for f in dir_files:
-            # print(f"f: {f}")
             if f == file:
                 file = f"episode_{self.id_header+1}"
             return file
-
         else:
             raise ValueError("Error with naming of the file")
 
@@ -48,14 +41,16 @@ class Header:
             "header_name": self.header_name,
             "header_id": self.id_header,
             "sub_header_name": self.sub_header_name,
-            # "sub_header_id": self.id_sub_header
         }
-        # print(dictionary)
+
         json_object = json.dumps(dictionary, indent=4)
 
         with open(f"{self.folder_to_create}{self.json_file_template}", "w") as file:
             file.write(json_object)
         return json_object
+
+    def new_sub_header_id(self):
+
 
 
     @staticmethod
