@@ -40,7 +40,6 @@ class Header:
         else:
             raise ValueError("Error with naming of the file")
 
-
     def new_header_id(self):
         self.check_header_id()
 
@@ -57,10 +56,25 @@ class Header:
             file.write(json_object)
         return json_object
 
+    def edit_header(self, id_header, header_name):
+        if id_header != self.id_header:
+            return "No such id"
+        else:
+            self.header_name = header_name
+            return self.new_header_id()
 
-    @staticmethod
-    def from_json(file):
-        pass
+    def edit_sub_header(self, id_header, sub_header_old_name, sub_header_new_name):
+        if id_header != self.id_header:
+            return "No such id"
+        else:
+            for sub_header in self.sub_header_name:
+                if sub_header_old_name == sub_header:
+                    self.sub_header_name = list(map(lambda x: x.replace(sub_header, sub_header_new_name), self.sub_header_name))
+                    return self.new_header_id()
+
+    # @staticmethod
+    # def from_json(file):
+    #     pass
         # with open("header.json, "w") as file
 
 
@@ -152,15 +166,20 @@ class CollapsibleXBlock(XBlock):
 if __name__ == '__main__':
     h1 = Header("Episode_1", "Sub_episode_1")
     h1.new_header_id()
+    h1.edit_header(1, "Episode_1")
 
     h2 = Header("Episode_2", "Sub_episode_1")
     h2.new_header_id()
+    # h2.edit_sub_header(2, "Sub_episode_10")
 
-    h3 = Header("Episode_3", ["Sub_episode_1", "Sub_episode_2", "Sub_episode_3"])
+    h3 = Header("Episode_3", "Sub_episode_1", "Sub_episode_2", "Sub_episode_3")
     h3.new_header_id()
+    h3.edit_sub_header(3, "Sub_episode_3", "Sub_episode_bla")
 
     h4 = Header("Episode_3", ["Sub_episode_1", "Sub_episode_2"])
     h4.new_header_id()
+
+
 
 
 # class ShittyDBClient:
