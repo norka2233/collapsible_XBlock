@@ -71,6 +71,12 @@ class Header:
         if header_id == self.id_header and header_name == self.header_name:
             return os.remove(f"{self.folder_to_create}{self.json_file_template}")
 
+    def delete_sub_header(self, header_id, header_name, sub_header_name_to_delete):
+        print()
+        if header_id == self.id_header and header_name == self.header_name:
+            [self.sub_header_name.remove(sub_header) for sub_header in self.sub_header_name if sub_header_name_to_delete == sub_header]
+        return self.new_header_id()
+
 
     # @staticmethod
     # def from_json(file):
@@ -178,9 +184,11 @@ if __name__ == '__main__':
     h3.edit_header(3, "Episode_pes")
     h3.edit_sub_header(3, "Sub_episode_3", "Sub_episode_cho")
     h3.new_sub_header_id(3, "Episode_pes", "Sub_episode_add_test")
+    h3.delete_sub_header(3, "Episode_pes", "Sub_episode_cho")
 
-    h4 = Header("Episode_3", ["Sub_episode_1", "Sub_episode_2"])
+    h4 = Header("Episode_3", "Sub_episode_1", "Sub_episode_2")
     h4.new_header_id()
+    h4.delete_sub_header(4, "Episode_3", "Sub_episode_1")
 
 
 

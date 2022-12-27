@@ -2,9 +2,6 @@
     "header_name": "Episode_3",
     "header_id": 4,
     "sub_header_name": [
-        [
-            "Sub_episode_1",
-            "Sub_episode_2"
-        ]
+        "Sub_episode_2"
     ]
 }
