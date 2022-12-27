@@ -5,11 +5,9 @@ import pkg_resources
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.fields import Integer, Scope, String
-from django.core import serializers
 
 import json
 import os
-from os import path
 
 
 class Header:
@@ -47,6 +45,11 @@ class Header:
         with open(f"{self.folder_to_create}{self.json_file_template}", "w") as file:
             file.write(json_object)
         return json_object
+
+    def new_sub_header_id(self, header_id, header_name, added_sub_header_name):
+        if self.id_header == header_id and self.header_name == header_name:
+            self.sub_header_name.append(added_sub_header_name)
+        return self.new_header_id()
 
     def edit_header(self, id_header, header_name):
         if id_header != self.id_header:
@@ -168,6 +171,7 @@ if __name__ == '__main__':
     h3.new_header_id()
     h3.edit_header(3, "Episode_pes")
     h3.edit_sub_header(3, "Sub_episode_3", "Sub_episode_cho")
+    h3.new_sub_header_id(3, "Episode_pes", "Sub_episode_add_test")
 
     h4 = Header("Episode_3", ["Sub_episode_1", "Sub_episode_2"])
     h4.new_header_id()
