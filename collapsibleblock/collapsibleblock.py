@@ -14,10 +14,10 @@ class Header:
 
     id_head = itertools.count(1)
 
-    def __init__(self, header_name, *argv):
+    def __init__(self, header_name, *args):
         self.id_header = next(Header.id_head)
         self.header_name = header_name
-        self.sub_header_name = [sub_header for sub_header in argv]
+        self.sub_header_name = [sub_header for sub_header in args]
         self.folder_to_create = "json_files/"
         self.json_file_template = f"episode_{self.id_header}"
 
@@ -72,11 +72,21 @@ class Header:
             return os.remove(f"{self.folder_to_create}{self.json_file_template}")
 
     def delete_sub_header(self, header_id, header_name, sub_header_name_to_delete):
-        print()
         if header_id == self.id_header and header_name == self.header_name:
-            [self.sub_header_name.remove(sub_header) for sub_header in self.sub_header_name if sub_header_name_to_delete == sub_header]
-        return self.new_header_id()
+            for sub_header in self.sub_header_name:
+                if sub_header_name_to_delete == sub_header:
+                    self.sub_header_name.remove(sub_header_name_to_delete)
 
+            dictionary = {
+                "header_name": self.header_name,
+                "header_id": self.id_header,
+                "sub_header_name": self.sub_header_name,
+            }
+
+            json_object = json.dumps(dictionary, indent=4)
+
+            with open(f"{self.folder_to_create}{self.json_file_template}", "w") as file:
+                file.write(json_object)
 
     # @staticmethod
     # def from_json(file):
@@ -173,7 +183,7 @@ if __name__ == '__main__':
     h1 = Header("Episode_1", "Sub_episode_1")
     h1.new_header_id()
     h1.edit_header(1, "Episode_1")
-    h1.delete_file_by_header(1,"Episode_1")
+    # h1.delete_file_by_header(1,"Episode_1")
 
     h2 = Header("Episode_2", "Sub_episode_1")
     h2.new_header_id()
@@ -184,11 +194,14 @@ if __name__ == '__main__':
     h3.edit_header(3, "Episode_pes")
     h3.edit_sub_header(3, "Sub_episode_3", "Sub_episode_cho")
     h3.new_sub_header_id(3, "Episode_pes", "Sub_episode_add_test")
-    h3.delete_sub_header(3, "Episode_pes", "Sub_episode_cho")
+    # h3.delete_sub_header(3, "Episode_pes", "Sub_episode_cho")
 
     h4 = Header("Episode_3", "Sub_episode_1", "Sub_episode_2")
     h4.new_header_id()
-    h4.delete_sub_header(4, "Episode_3", "Sub_episode_1")
+    h4.new_sub_header_id(4, "Episode_3", "Sub_episode_4")
+    # h4.delete_sub_header(4, "Episode_3", "Sub_episode_1")
+    h4.delete_sub_header(4, "Episode_3", "Sub_episode_2")
+    h4.delete_sub_header(4, "Episode_3", "Sub_episode_4")
 
 
 
