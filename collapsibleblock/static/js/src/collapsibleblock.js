@@ -8,6 +8,13 @@ function CollapsibleXBlock(runtime, element, init_args) {
         $('#header_edit_btn').click(function() {
             $(this).val('Submit');
         });
+     });
+
+    $(document).ready(function() {
+        $('#header_edit_btn').click(function() {
+            $('#header_edit_btn').after('<input type="text" id="textInput" value="">');
+        });
+    });
 //    function editHeader(new_header_name) {
 //        $('.header_edit_btn', element).text(new_header_name.new_header_name);
 //    }
@@ -22,9 +29,7 @@ function CollapsibleXBlock(runtime, element, init_args) {
 //            success: editHeader
 //        });
 //    });
-
     return {};
- });
  };
 //
 //function ThumbsAside(runtime, element, block_element, init_args) {
