@@ -21,10 +21,10 @@ class CollapsibleXBlock(XBlock):
     # self.<fieldname>.
 
     # TO-DO: delete count, and define your own fields.
-    count = Integer(default=0, scope=Scope.user_state,help="A simple counter, to show something happening")
-    upvotes = Integer(help="Number of up votes", default=0, scope=Scope.user_state_summary)
-    downvotes = Integer(help="Number of down votes", default=0, scope=Scope.user_state_summary)
-    voted = Boolean(help="Has this student voted?", default=False, scope=Scope.user_state)
+    # count = Integer(default=0, scope=Scope.user_state,help="A simple counter, to show something happening")
+    # upvotes = Integer(help="Number of up votes", default=0, scope=Scope.user_state_summary)
+    # downvotes = Integer(help="Number of down votes", default=0, scope=Scope.user_state_summary)
+    # voted = Boolean(help="Has this student voted?", default=False, scope=Scope.user_state)
     # header = String(default="Episode", scope=Scope.user_state_summary, help="The header of the collapsible block",)
     # sub_header = String(default="Default subheader", scope=Scope.user_state_summary, help=(f"The subheader of the {header}"))
     # db_extract = String(default="No records from DB", scope=Scope.user_state_summary, help=(f"Brace yourself!"))
@@ -34,7 +34,7 @@ class CollapsibleXBlock(XBlock):
     sub_header_name = String(default="Default sub_header_name", scope=Scope.user_state_summary, help=("sub_header_name"))
 
     def block(self, header_name, *args):
-        self.id_header = next(CollapsibleXBlock.id_head)
+        self.id_header = next(CollapsibleXBlock.id_header)
         self.header_name = header_name
         self.sub_header_name = [sub_header for sub_header in args]
         self.folder_to_create = "json_files/"
@@ -58,41 +58,41 @@ class CollapsibleXBlock(XBlock):
         frag.initialize_js('CollapsibleXBlock')
         return frag
 
-    @XBlock.json_handler
-    def vote(self, data, suffix=''):  # pylint: disable=unused-argument
-        """
-        Update the vote count in response to a user action.
-        """
-        # Here is where we would prevent a student from voting twice, but then
-        # we couldn't click more than once in the demo!
-        #
-        #     if self.voted:
-        #         log.error("cheater!")
-        #         return
-
-        if data['voteType'] not in ('up', 'down'):
-            log.error('error!')
-            return None
-
-        if data['voteType'] == 'up':
-            self.upvotes += 1
-        else:
-            self.downvotes += 1
-
-        self.voted = True
-
-        return {'up': self.upvotes, 'down': self.downvotes}
-
-    @XBlock.json_handler
-    def increment_count(self, data, suffix=''):
-        """
-        An example handler, which increments the data.
-        """
-        # Just to show data coming in...
-        assert data['hello'] == 'world'
-
-        self.count += 1
-        return {"count": self.count}
+    # @XBlock.json_handler
+    # def vote(self, data, suffix=''):  # pylint: disable=unused-argument
+    #     """
+    #     Update the vote count in response to a user action.
+    #     """
+    #     # Here is where we would prevent a student from voting twice, but then
+    #     # we couldn't click more than once in the demo!
+    #     #
+    #     #     if self.voted:
+    #     #         log.error("cheater!")
+    #     #         return
+    #
+    #     if data['voteType'] not in ('up', 'down'):
+    #         log.error('error!')
+    #         return None
+    #
+    #     if data['voteType'] == 'up':
+    #         self.upvotes += 1
+    #     else:
+    #         self.downvotes += 1
+    #
+    #     self.voted = True
+    #
+    #     return {'up': self.upvotes, 'down': self.downvotes}
+    #
+    # @XBlock.json_handler
+    # def increment_count(self, data, suffix=''):
+    #     """
+    #     An example handler, which increments the data.
+    #     """
+    #     # Just to show data coming in...
+    #     assert data['hello'] == 'world'
+    #
+    #     self.count += 1
+    #     return {"count": self.count}
 
         # html = self.resource_string("static/html/collapsibleblock.html")
         # frag = Fragment(html.format(self=self))
@@ -149,20 +149,25 @@ class CollapsibleXBlock(XBlock):
     #     return {"count": self.count}
 
     @XBlock.json_handler
-    def edit_header(self, new_header_name):
-        new_header_name = input()
-        self.header_name == new_header_name
+    def edit_header(self):
+        with open(f"{self.folder_to_create}{self.json_file_template}") as file:
+            data = json.load(file)
 
-        dictionary = {
-            "header_name": self.header_name,
-            "header_id": self.id_header,
-            "sub_header_name": self.sub_header_name,
-        }
-        json_object = json.dumps(dictionary, indent=4)
+        for item in data:
+            print(item)
 
-        with open(f"{self.folder_to_create}{self.json_file_template}", "w") as file:
-            file.write(json_object)
-        return json_object
+        # self.header_name == new_header_name
+
+        # dictionary = {
+        #     "header_name": self.header_name,
+        #     "header_id": self.id_header,
+        #     "sub_header_name": self.sub_header_name,
+        # }
+        # json_object = json.dumps(dictionary, indent=4)
+        #
+        # with open(f"{self.folder_to_create}{self.json_file_template}", "w") as file:
+        #     file.write(json_object)
+        # return json_object
 
 
         # id_header = new_header_name.get('id_header')
@@ -221,12 +226,13 @@ class CollapsibleXBlock(XBlock):
                 </vertical_demo>
              """),
         ]
-#
-# if __name__ == '__main__':
-#     h1 = Header("Episode_1", "Sub_episode_1")
-#     h1.new_header_id()
-#     h1.edit_header(1, "Episode_1")
-#     # h1.delete_file_by_header(1,"Episode_1")
+
+if __name__ == '__main__':
+    h5 = CollapsibleXBlock()
+    h5.block(5, "Episode_5", "Sub_episode_5")
+
+    # h1.edit_header(1, "Episode_1")
+    # h1.delete_file_by_header(1,"Episode_1")
 #
 #     h2 = Header("Episode_2", "Sub_episode_1")
 #     h2.new_header_id()
